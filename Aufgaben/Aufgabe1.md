@@ -1,4 +1,4 @@
-# Ticketautomat Chatbot:
+ï»¿# Ticketautomat Chatbot:
 
 ### Ablauf:
 Abfrage Erwachsen/Kind\
@@ -6,16 +6,16 @@ Abfrage Anzahn an Waben\
 Abfrage Ticketart (tag, Monat, Jahr)?
 
 ### Berechnung:
-Grundpreis (G) = 3,00 € \
+Grundpreis (G) = 3,00 â‚¬ \
 n = Anzahl an Waben
 
 Tagesticket:\
-Für eine warbe ist der preis der Grundpreis, für jede warbe die dazukommt werden 2,50€ dazu berechnet.
+FÃ¼r eine warbe ist der preis der Grundpreis, fÃ¼r jede warbe die dazukommt werden 2,50â‚¬ dazu berechnet.
 
 Monatsticket:\
-Wird immer für 20 Tage berechnet mit 30% Rabatt
+Wird immer fÃ¼r 20 Tage berechnet mit 30% Rabatt
 
 Jahresticket:\
-Wird für 12 Monate berechnet mit 25% Rabatt
+Wird fÃ¼r 12 Monate berechnet mit 25% Rabatt
 
-Ab 5 Waben soll sich der Preis nicht mehr erhöhen.
+Ab 5 Waben soll sich der Preis nicht mehr erhÃ¶hen.
