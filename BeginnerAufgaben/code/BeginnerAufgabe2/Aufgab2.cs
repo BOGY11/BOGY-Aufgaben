@@ -2,11 +2,23 @@
 // --- SCHRITT 1: HIER KANNST DU DAS SYSTEM STEUERN ---
 // =========================================================
 
+
 string linie = "S3";
 string zielHaltestelle = "Karlsruhe Hbf";
 int minutenBisAbfahrt = 120;
 bool fahrtFaelltAus = false;
 string sonderMeldung = "";
+
+// Das hier schreiben die Schülerinnen mit deiner Hilfe:
+string anzeigeText = "";
+if (minutenBisAbfahrt == 0)
+{
+    anzeigeText = "SOFORT EINSTEIGEN!";
+}
+else
+{
+    anzeigeText = minutenBisAbfahrt + " Min";
+}
 
 // =========================================================
 // --- SCHRITT 2: INIT-SYSTEM (Ab hier bitte nichts ändern) ---
