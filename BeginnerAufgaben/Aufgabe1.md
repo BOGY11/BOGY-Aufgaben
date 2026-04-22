@@ -24,6 +24,29 @@ Damit haben wir eine Variable vom typ int erstellt.\
 Das bedeutet, dass c Ganzzahlen speichern kann.\
 Propiere es aus indem du c einen wert gibts.\
 Z.B.:\
-`a = 15`\
+`a = 15;`\
 und gebe diesen wert anschließend in der Console aus:\
-`Console.WriteLine(a)`
+`Console.WriteLine(a);`
+
+Führe das Programm aus.
+
+## Phase 3 (Variablen zusammenrechnen)
+Füge nun unten eine neue Variable vom typ int mit den Namen `b` hinzu und gebe ihr einen wert.\
+Füge darunter noch eine neue variable vom typ int mit dem namen `c`.\
+Gebe `c` folgenden wert:\
+`c = a + b;`\
+Gebe die werte für `a`, `b` und `c` au:
+```
+Console.WriteLine(a);
+Console.WriteLine(b);
+Console.WriteLine(c);
+```
+Führe das Programm aus.\
+Gebe anschließend verschiedene werte für `a` und `b` an und schau was passiert, wenn du das Programm ausführst.
+
+## Phase 3 (Fläche eines Rechtecks berechnen)
+Ändere den wert von `c` so ab, dass es das Volumen des Rechtecks mit der grundseite `a` und der höhe `b` berechnet.\
+Die Formel dafür lautet:
+Fläche $= a \times b$
+
+Führe das Programm aus.
