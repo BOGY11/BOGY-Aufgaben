@@ -5,20 +5,23 @@
 
 string linie = "S3";
 string zielHaltestelle = "Karlsruhe Hbf";
-int minutenBisAbfahrt = 120;
+int minutenBisAbfahrt = 3;
 bool fahrtFaelltAus = false;
 string sonderMeldung = "";
 
-// Das hier schreiben die Schülerinnen mit deiner Hilfe:
-string anzeigeText = "";
-if (minutenBisAbfahrt == 0)
+while(minutenBisAbfahrt >= 0)
 {
-    anzeigeText = "SOFORT EINSTEIGEN!";
-}
-else
-{
-    anzeigeText = minutenBisAbfahrt + " Min";
-}
+
+    // Das hier schreiben die Schülerinnen mit deiner Hilfe:
+    string anzeigeText = "";
+    if (minutenBisAbfahrt == 0)
+    {
+        anzeigeText = "SOFORT EINSTEIGEN!";
+    }
+    else
+    {
+        anzeigeText = minutenBisAbfahrt + " Min";
+    }
 
 // =========================================================
 // --- SCHRITT 2: INIT-SYSTEM (Ab hier bitte nichts ändern) ---
@@ -42,10 +45,15 @@ else
     else
     {
         Console.ForegroundColor = ConsoleColor.Yellow; // Klassisches DFI-Orange
-        Console.Write($"{linie,-4} {zielHaltestelle,-30} {minutenBisAbfahrt + " Min ",15}");
+        Console.Write($"{linie,-4} {zielHaltestelle,-30} {anzeigeText,15}");
     }
     Console.ForegroundColor = ConsoleColor.DarkGray;
-    Console.WriteLine("   ║");
+    if (minutenBisAbfahrt > 0 )
+        Console.WriteLine("   ║");
+    else if(fahrtFaelltAus != true)
+        Console.WriteLine("║");
+    else
+        Console.WriteLine("   ║");
 
     // Sondermeldung (Ticker)
     Console.WriteLine("╠══════════════════════════════════════════════════════╣");
@@ -66,4 +74,7 @@ else
 
     // Reset für das System
     Console.ForegroundColor = ConsoleColor.White;
-    Console.ReadLine();
+    
+    Thread.Sleep(1000); // Wir tun so, als wäre eine Sekunde eine Minute
+    minutenBisAbfahrt--;
+}
