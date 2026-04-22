@@ -33,9 +33,9 @@ Führe das Programm aus.
 ## Phase 3 (Variablen zusammenrechnen)
 Füge nun unten eine neue Variable vom typ `int` mit den Namen `b` hinzu und gebe ihr einen wert.\
 Füge darunter noch eine neue variable vom typ `int` mit dem namen `c`.\
-Gebe für `c` folgenden wert:\
+Gebe für `c` folgenden wert ein:\
 `c = a + b;`\
-Gebe die werte für `a`, `b` und `c` au:
+Gebe die werte für `a`, `b` und `c` aus:
 ```
 Console.WriteLine(a);
 Console.WriteLine(b);
@@ -46,7 +46,7 @@ Gebe anschließend verschiedene werte für `a` und `b` an und schau was passiert
 
 ## Phase 3 (Fläche eines Rechtecks berechnen)
 Ändere den wert von `c` so ab, dass es das Volumen des Rechtecks mit der grundseite `a` und der höhe `b` berechnet.\
-Die Formel dafür lautet:
-Fläche $= a \times b$ 
+Die Formel dafür lautet:\
+Fläche = a * b
 
 Führe das Programm aus.
