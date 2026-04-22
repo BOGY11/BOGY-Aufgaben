@@ -1,5 +1,8 @@
 # BOGY-Aufgaben
 
-## Aufgaben
-- [Aufgabe 1](Aufgaben/Aufgabe1.md)
-- [Aufgabe 2](Aufgaben/Aufgabe2.md)
+## Aufgaben (Lvl Beginner):
+- [Aufgabe 1](BeginnerAufgaben/Aufgabe1.md)
+
+## Aufgaben (Lvl Easy):
+- [Aufgabe 1](EasyAufgaben/Aufgabe1.md)
+- [Aufgabe 2](EasyAufgaben/Aufgabe2.md)
