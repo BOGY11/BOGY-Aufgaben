@@ -7,3 +7,4 @@
 ## Aufgaben (Lvl Easy):
 - [Aufgabe 1](EasyAufgaben/Aufgabe1.md)
 - [Aufgabe 2](EasyAufgaben/Aufgabe2.md)
+- [Aufgabe 3](Aufgaben/Aufgabe3.md)
