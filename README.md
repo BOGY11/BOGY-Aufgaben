@@ -11,3 +11,6 @@
 
 ## Scratch Aufgaben
 - [Aufgabe 1](ScratchAufgaben/Aufgabe1.md)
+
+## Tutorials
+- [Neues Projekt erstellen](Tutorials/NewProject.md)

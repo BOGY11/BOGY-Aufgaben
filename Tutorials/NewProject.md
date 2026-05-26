@@ -14,3 +14,7 @@ Drücke auf die drei Punkte.
 Wähle in Dieser PC -> O: den ordner mit deinem Namen aus.\
 Falls dieser nicht exsestiert erstelle einen.
 ![image](Bilder/ProjectLocation.png)
+## Schritt 5
+Klicke auf 'Create'
+![image](Bilder/NewProjectCreateButton.png)
+## Fertig
