@@ -1,12 +1,12 @@
 # Wie lese ich eine Konsoleneingabe?
 ## Schritt 1
-Erstelle eine Variable vom Typ string in der die eingabe gespeichert wird.\
+Erstelle eine Variable vom Typ `string` in der die Eingabe gespeichert wird.\
 Z.B.:
 ```
 string eingabe;
 ```
 ## Schritt 2
-Rufe `Console.ReadLine()` auf und speicher das ergebnis in deiner variable.
+Rufe `Console.ReadLine()` auf und speicher das ergebnis in deiner Variable.\
 Hier:
 ```
 string eingabe;
