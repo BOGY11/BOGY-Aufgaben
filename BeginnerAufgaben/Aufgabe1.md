@@ -2,12 +2,7 @@
 Ziel ist es zu verstehen, was Variablen sind und wie man diese verändert.
 
 ## Phase 1 (Project erstellen)
-Öffne Visual Studio und drücke auf 'Neues Project erstellen', bzw. 'Create new Project'. \
-Wähle dann 'Console App', bzw. 'Consolenanwendung'.\
-Gebe als Projectname 'Variablen' ein.\
-Falls du noch keinen hast erstelle im laufwerk O: ein neuen Ordner mit deinem Namen.\
-Diesen wählst du dann als speicherort für dein project.
-Die restlichen einstellungen kannst du so lassen, wie sie sind.
+[Schrittweise anleitung](../Tutorials/NewProject.md)
 
 Es öffnet sich eine datei in der so etwas drin steht:
 ``` 

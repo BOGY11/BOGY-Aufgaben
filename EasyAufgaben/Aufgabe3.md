@@ -7,13 +7,8 @@ Der Fokus liegt darauf, grundlegende Programmierkonzepte zu verstehen und anzuwe
 ---
 
 ## Schritt 1: Neues Projekt erstellen
-
-### Mit Visual Studio:
-- Öffne Visual Studio
-- Klicke auf **"Neues Projekt erstellen"**
-- Wähle **"Konsolenanwendung (.NET)"**
-- Vergib einen Projektnamen (z. B. `SchereSteinPapier`)
-- Klicke auf **"Erstellen"**
+Erstelle ein neues Project und nenne es 'SchereSteinPapier'.\
+[Tutorial neues Projekt erstellen](../Tutorials/NewProject.md)
 
 ---
 
