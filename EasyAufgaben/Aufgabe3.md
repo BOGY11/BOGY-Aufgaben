@@ -7,13 +7,8 @@ Der Fokus liegt darauf, grundlegende Programmierkonzepte zu verstehen und anzuwe
 ---
 
 ## Schritt 1: Neues Projekt erstellen
-
-### Mit Visual Studio:
-- Öffne Visual Studio
-- Klicke auf **"Neues Projekt erstellen"**
-- Wähle **"Konsolenanwendung (.NET)"**
-- Vergib einen Projektnamen (z. B. `SchereSteinPapier`)
-- Klicke auf **"Erstellen"**
+Erstelle ein neues Project und nenne es 'SchereSteinPapier'.\
+[Tutorial neues Projekt erstellen](../Tutorials/NewProject.md)
 
 ---
 
@@ -21,6 +16,7 @@ Der Fokus liegt darauf, grundlegende Programmierkonzepte zu verstehen und anzuwe
 
 ### Eine typische C#-Konsolenanwendung sieht so aus:
 
+```
 using System;
 
 class Program
@@ -30,6 +26,7 @@ class Program
         // Hier beginnt dein Programm
     }
 }
+```
 
 Alles, was dein Programm tun soll, passiert innerhalb der Main-Methode.
 
@@ -53,10 +50,10 @@ Das Ergebnis wird ausgegeben:
 
 ## Schritt 3: Wichtige Bausteine
 
-Das Programm soll eine Konsoleneingabe erfordern. Das heißt der Spieler muss mithilfe von Console.Readline() das Programm steuern können.\
+Das Programm soll eine [Konsoleneingabe](../Tutorials/ConsolenEingabe.md) erfordern. Das heißt der Spieler muss mithilfe von Console.Readline() das Programm steuern können.\
 Neben der Auswahl der "Handgeste", soll der Spieler das Spiel starten, wiederholen als auch beenden können.
 
-Mit der Klasse "Random" kann man eine Zufallszahl generieren. Das kann bei der Auswahl des Computers aushelfen.\
+Mit der Klasse "Random" kann man eine [Zufallszahl generieren](../Tutorials/Random.md). Das kann bei der Auswahl des Computers aushelfen.\
 Weise jeder Handgeste eine Zahl zu, und der Zahlengenerator wählt für den Gegner eine Aktion.
 
 Am Ende der Auswahlsphase sollen die gewählten Handgesten der Spieler verglichen werden. \
