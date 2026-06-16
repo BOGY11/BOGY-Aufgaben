@@ -1,4 +1,3 @@
-````markdown
 # Programmieraufgabe: Benutzerverwaltung in C#
 
 ## Ziel der Aufgabe
@@ -202,4 +201,3 @@ Versuche den Code übersichtlich zu halten und Funktionen sinnvoll aufzuteilen.
 Wenn du nicht weiterkommst, kannst du im Internet recherchieren ("C# List", "C# Class", "C# Switch") oder deine Kollegen fragen.
 
 Zeige deine Fortschritte regelmäßig einem Kollegen, damit mögliche Verbesserungen früh erkannt werden können.
-````
