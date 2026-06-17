@@ -12,7 +12,7 @@ Der Fokus liegt darauf, grundlegende Programmierkonzepte wie Variablen, Klassen,
 
 Erstelle ein neues Projekt und nenne es **Benutzerverwaltung**.
 
-Tutorial neues Projekt erstellen
+[Tutorial neues Projekt erstellen](../Tutorials/NewProject.md)
 
 ---
 
