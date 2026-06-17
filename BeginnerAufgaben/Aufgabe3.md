@@ -46,6 +46,8 @@ Erstelle zunächst ein Programm, das folgende Informationen vom Benutzer abfragt
 
 Die eingegebenen Daten sollen gespeichert und anschließend wieder auf der Konsole ausgegeben werden.
 
+[Tutorial Konsoleneingabe](../Tutorials/ConsolenEingabe.md)
+
 Beispiel:
 
 ```text
