@@ -93,6 +93,9 @@ Tipp:
 List<User> users = new List<User>();
 ```
 
+Da "Console.Readline()" integer nicht auslesen kann, muss man diese integer vorher parsen.
+[Zum Parsen von Variablen](../Tutorials/Parsing.md)
+
 ---
 
 # Schritt 5: Funktionen auslagern
