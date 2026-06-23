@@ -14,5 +14,6 @@
 
 ## Tutorials
 - [Neues Projekt erstellen](Tutorials/NewProject.md)
+- [Neue Klasse erstellen](Tutorials/CreateClass.md)
 - [Konsoleneingabe](Tutorials/ConsolenEingabe.md)
 - [Parsing](Tutorials/Parsing.md)
