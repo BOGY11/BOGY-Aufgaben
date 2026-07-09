@@ -14,3 +14,5 @@ Wie lernen jetzt etwas neues zusammen und zwar wie wir das Programm intelligent 
 Wir benutzen eine sogenannte Schleife, diese verringert dann automatisch die Zeit bis die nächste Bahn kommt. Ihr werdet sehen wie die Zahlen auf der Anzeige anfangen zu ticken. Die Anzeige ist jetzt nicht mehr immer gleich sondern ändert sich von alleine.
 
 Dazu brauchen wir eine while-Schleife und eine Zählvariable.
+
+### [code](.\code\BeginnerAufgabe2\Aufgab2.cs)
