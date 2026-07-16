@@ -50,6 +50,8 @@ Dazu wird eine Stopwatch gestartet und in einer Schleife läuft die Animation, s
 Nach jedem Durchlauf wird die aktuelle Konsolenzeile überschrieben (Console.ClearLine(), dafür musst du deiner solution die [ConsoleExtension](code/EasyAufgabe4/ConsoleExtensions.cs)) und die drei Symbole im Format [🍇|🍊|🍊] ausgegeben.\
 Danach wartet die Methode 100 Millisekunden (await Task.Delay(100)), bevor der nächste Frame gezeichnet wird.
 
+[Tipp](tipps/EasyAufgabe4/tippDrehen.md)
+
 Teste dein code in Program.cs:
 ```
 Console.OutputEncoding = System.Text.Encoding.UTF8;
