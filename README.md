@@ -8,6 +8,7 @@
 - [Aufgabe 1](EasyAufgaben/Aufgabe1.md)
 - [Aufgabe 2](EasyAufgaben/Aufgabe2.md)
 - [Aufgabe 3](EasyAufgaben/Aufgabe3.md)
+- [Aufgabe 4](EasyAufgaben/Aufgabe4.md)
 
 ## Scratch Aufgaben
 - [Aufgabe 1](ScratchAufgaben/Aufgabe1.md)
