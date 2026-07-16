@@ -113,5 +113,5 @@ Nenne sie Ass1, Ass2, usw.\
 Stelle bei den Properties der Button Visible auf false.\
 achte darauf, dass die Buttons groﬂ genug sind, dass der Text 'Kreuz-Ass Wert ‰ndern' sichtbar rein passt.
 
-Wenn der Spieler ein Ass zieht soll der Button Ass1 sichtbar werden und der Text soll zu '(Karten-Name fom ass) Wert ‰ndern' werden.\
+Wenn der Spieler ein Ass zieht soll der Button Ass1 sichtbar werden und der Text soll zu '(Karten-Name vom ass) Wert ‰ndern' werden.\
 Wenn witere Asse gezogen werden, soll das dann auch mit den n‰chsten Buttons passieren.
