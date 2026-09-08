@@ -11,6 +11,9 @@
 - [Aufgabe 3](EasyAufgaben/Aufgabe3.md)
 - [Aufgabe 4](EasyAufgaben/Aufgabe4.md)
 
+## Aufgaben (Lvl Medium)
+- [Aufgabe 1](MediumAufgaben/Aufgabe1.md)
+
 ## Scratch Aufgaben
 - [Aufgabe 1](ScratchAufgaben/Aufgabe1.md)
 
