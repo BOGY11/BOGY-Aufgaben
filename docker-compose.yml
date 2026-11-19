@@ -1,0 +1,13 @@
+services:
+  jekyll:
+    image: jekyll/jekyll:latest
+    command: >
+      bash -c "bundle install && bundle exec jekyll serve --watch --force_polling --host 0.0.0.0"
+    ports:
+      - 4000:4000
+    volumes:
+      - .:/srv/jekyll
+      - bundle-cache:/usr/local/bundle
+
+volumes:
+  bundle-cache:
