@@ -1,0 +1,316 @@
+<!--
+  _includes/head_custom.html - eigene Erweiterungen fuer Just the Docs
+  1. Hell/Dunkel-Umschalter          (obere Leiste neben der Suche)
+  2. Seitenleiste ein-/ausblenden    (Button unten links)
+  3. Breite der Seitenleiste ziehen  (rechter Rand der Seitenleiste)
+  4. Anklickbare Checklisten         (- [ ] in Markdown)
+  Alle Einstellungen werden im Browser gespeichert (localStorage).
+  Farben fuer Tipps/Notizen stehen in _sass/custom/custom.scss.
+-->
+<style>
+  :root {
+    --sidebar-width: 200px;
+    --btn-bg: #27262b;
+    --btn-fg: #e6e1e8;
+    --btn-border: #44434d;
+    --btn-hover: #302d36;
+    --handle-color: #58a6ff;
+  }
+  html[data-theme="light"] {
+    --btn-bg: #f5f6fa;
+    --btn-fg: #27262b;
+    --btn-border: #d3d6de;
+    --btn-hover: #e6e8ef;
+    --handle-color: #7253ed;
+  }
+
+  /* ---------- Buttons ---------- */
+  .jtd-btn {
+    position: fixed;
+    bottom: 1rem;
+    z-index: 1000;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--btn-border);
+    border-radius: 6px;
+    background: var(--btn-bg);
+    color: var(--btn-fg);
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+  .jtd-btn:hover { background: var(--btn-hover); }
+  .sidebar-toggle { left: 1rem; }
+  .theme-toggle   { right: 1rem; }
+  .theme-toggle.in-header {
+    position: static !important;
+    align-self: center;
+    flex-shrink: 0;
+    margin: 0 0.75rem;
+    white-space: nowrap;
+  }
+
+  /* ---------- Checklisten ---------- */
+  .main-content input[type="checkbox"] {
+    cursor: pointer;
+    transform: scale(1.2);
+    margin-right: 0.4em;
+  }
+
+  /* ---------- Seitenleiste (nur breite Bildschirme) ---------- */
+  @media (min-width: 50rem) {
+    .side-bar {
+      width: var(--sidebar-width) !important;
+      min-width: 0 !important;
+      flex: 0 0 var(--sidebar-width) !important;
+    }
+    .side-bar .site-header,
+    .side-bar .site-nav,
+    .side-bar .site-footer {
+      width: 100% !important;
+      max-width: none !important;
+    }
+    .main {
+      margin-left: var(--sidebar-width) !important;
+      max-width: none !important;
+    }
+
+    .sidebar-resizer {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: calc(var(--sidebar-width) - 4px);
+      width: 8px;
+      z-index: 1001;
+      cursor: col-resize;
+      background: transparent;
+      touch-action: none;
+    }
+    .sidebar-resizer:hover,
+    .sidebar-resizer:focus-visible,
+    html.sidebar-resizing .sidebar-resizer {
+      background: var(--handle-color);
+      opacity: 0.6;
+      outline: none;
+    }
+    html.sidebar-resizing,
+    html.sidebar-resizing * {
+      cursor: col-resize !important;
+      user-select: none !important;
+    }
+
+    html.sidebar-collapsed .side-bar        { display: none !important; }
+    html.sidebar-collapsed .main            { margin-left: 0 !important; }
+    html.sidebar-collapsed .sidebar-resizer { display: none; }
+  }
+
+  @media (max-width: 49.99rem) {
+    .sidebar-toggle,
+    .sidebar-resizer { display: none; }
+  }
+
+  @media print {
+    .jtd-btn,
+    .sidebar-resizer { display: none !important; }
+  }
+</style>
+<script>
+(function () {
+  "use strict";
+
+  var CONFIG = {
+    defaultTheme: "dark",
+    sidebarDefault: 200,
+    sidebarMin: 150,
+    sidebarMax: 450,
+    sidebarStep: 16
+  };
+
+  var KEYS = {
+    theme: "color-theme",
+    collapsed: "sidebar-collapsed",
+    width: "sidebar-width",
+    checkbox: "checkliste:"
+  };
+
+  var root = document.documentElement;
+
+  function load(key) {
+    try { return localStorage.getItem(key); } catch (e) { return null; }
+  }
+  function save(key, value) {
+    try { localStorage.setItem(key, value); } catch (e) { /* privater Modus */ }
+  }
+
+  /* ---------- 1. Hell/Dunkel ---------- */
+  function applyTheme(theme) {
+    var link = document.querySelector('link[rel="stylesheet"][href*="just-the-docs-"]');
+    if (link) {
+      link.href = link.href.replace(/just-the-docs-[a-z]+\.css/, "just-the-docs-" + theme + ".css");
+    }
+    root.setAttribute("data-theme", theme);
+  }
+  function currentTheme() {
+    return root.getAttribute("data-theme");
+  }
+
+  /* ---------- 3. Breite der Seitenleiste ---------- */
+  var sidebarWidth = CONFIG.sidebarDefault;
+  function setSidebarWidth(px) {
+    sidebarWidth = Math.min(CONFIG.sidebarMax, Math.max(CONFIG.sidebarMin, Math.round(px)));
+    root.style.setProperty("--sidebar-width", sidebarWidth + "px");
+  }
+
+  /* ---------- Sofort anwenden (verhindert Flackern) ---------- */
+  var savedTheme = load(KEYS.theme);
+  if (savedTheme) {
+    applyTheme(savedTheme);
+  } else {
+    root.setAttribute("data-theme", CONFIG.defaultTheme);
+  }
+  setSidebarWidth(parseInt(load(KEYS.width), 10) || CONFIG.sidebarDefault);
+  if (load(KEYS.collapsed) === "1") {
+    root.classList.add("sidebar-collapsed");
+  }
+
+  function makeButton(className) {
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "jtd-btn " + className;
+    document.body.appendChild(btn);
+    return btn;
+  }
+
+  /* ---------- 1. Hell/Dunkel-Button ---------- */
+  function initThemeToggle() {
+    var btn = makeButton("theme-toggle");
+
+    function update() {
+      var isDark = currentTheme() === "dark";
+      btn.textContent = isDark ? "\u2600\uFE0F Hell" : "\uD83C\uDF19 Dunkel";
+      btn.setAttribute("aria-label", isDark ? "Helles Design aktivieren" : "Dunkles Design aktivieren");
+    }
+
+    btn.addEventListener("click", function () {
+      var next = currentTheme() === "dark" ? "light" : "dark";
+      applyTheme(next);
+      save(KEYS.theme, next);
+      update();
+    });
+
+    update();
+
+    var header = document.querySelector(".main-header");
+    if (header) {
+      var search = header.querySelector(".search");
+      if (search) {
+        search.insertAdjacentElement("afterend", btn);
+      } else {
+        header.insertBefore(btn, header.firstChild);
+      }
+      btn.classList.add("in-header");
+    }
+  }
+
+  /* ---------- 2. Seitenleiste ein-/ausblenden ---------- */
+  function initSidebarToggle() {
+    var btn = makeButton("sidebar-toggle");
+
+    function update() {
+      var collapsed = root.classList.contains("sidebar-collapsed");
+      btn.textContent = collapsed ? "\u2630 Men\u00FC" : "\u00AB Men\u00FC ausblenden";
+      btn.setAttribute("aria-expanded", collapsed ? "false" : "true");
+    }
+
+    btn.addEventListener("click", function () {
+      var collapsed = root.classList.toggle("sidebar-collapsed");
+      save(KEYS.collapsed, collapsed ? "1" : "0");
+      update();
+    });
+
+    update();
+  }
+
+  /* ---------- 3. Ziehgriff ---------- */
+  function initSidebarResizer() {
+    if (!document.querySelector(".side-bar")) return;
+
+    var handle = document.createElement("div");
+    handle.className = "sidebar-resizer";
+    handle.tabIndex = 0;
+    handle.title = "Ziehen: Breite \u00E4ndern \u00B7 Doppelklick: zur\u00FCcksetzen";
+    handle.setAttribute("role", "separator");
+    handle.setAttribute("aria-orientation", "vertical");
+    handle.setAttribute("aria-label", "Breite der Seitenleiste \u00E4ndern");
+    document.body.appendChild(handle);
+
+    var dragging = false;
+
+    function commit() {
+      save(KEYS.width, String(sidebarWidth));
+    }
+
+    handle.addEventListener("pointerdown", function (e) {
+      if (e.button !== 0) return;
+      e.preventDefault();
+      dragging = true;
+      handle.setPointerCapture(e.pointerId);
+      root.classList.add("sidebar-resizing");
+    });
+
+    handle.addEventListener("pointermove", function (e) {
+      if (dragging) setSidebarWidth(e.clientX);
+    });
+
+    function stop() {
+      if (!dragging) return;
+      dragging = false;
+      root.classList.remove("sidebar-resizing");
+      commit();
+    }
+    handle.addEventListener("pointerup", stop);
+    handle.addEventListener("pointercancel", stop);
+
+    handle.addEventListener("dblclick", function () {
+      setSidebarWidth(CONFIG.sidebarDefault);
+      commit();
+    });
+
+    handle.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowLeft")  { setSidebarWidth(sidebarWidth - CONFIG.sidebarStep); commit(); e.preventDefault(); }
+      if (e.key === "ArrowRight") { setSidebarWidth(sidebarWidth + CONFIG.sidebarStep); commit(); e.preventDefault(); }
+    });
+  }
+
+  /* ---------- 4. Checklisten ---------- */
+  function initCheckboxes() {
+    var boxes = document.querySelectorAll(".main-content input[type='checkbox']");
+
+    boxes.forEach(function (box, i) {
+      var key = KEYS.checkbox + location.pathname + ":" + i;
+
+      box.disabled = false;
+      box.removeAttribute("disabled");
+
+      var saved = load(key);
+      if (saved !== null) box.checked = saved === "1";
+
+      box.addEventListener("change", function () {
+        save(key, box.checked ? "1" : "0");
+      });
+    });
+  }
+
+  /* ---------- Start ---------- */
+  function start() {
+    [initCheckboxes, initSidebarToggle, initSidebarResizer, initThemeToggle].forEach(function (fn) {
+      try { fn(); } catch (e) { console.error("head_custom.html:", fn.name, e); }
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", start);
+  } else {
+    start();
+  }
+})();
+</script>
+

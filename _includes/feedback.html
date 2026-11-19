@@ -1,0 +1,126 @@
+<!-- Feedback Formular powered by Web3Forms -->
+<div class="feedback-card">
+<h3>💬 Feedback zu diesem Kapitel</h3>
+<p class="feedback-subtitle">
+Ist etwas unklar, hast du einen Tippfehler gefunden oder möchtest du Rückmeldung geben?
+</p>
+<form action="https://api.web3forms.com/submit" method="POST" class="feedback-form">
+<input type="hidden" name="access_key" value="42779559-babf-4bae-8db2-2f9d1990e784">
+<input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+<input type="hidden" name="subject" value="Tutorial-Feedback: {{ page.title | default: 'Allgemein' }}">
+<input type="hidden" name="from_name" value="C#-Tutorial Feedback">    
+<input type="hidden" name="Kapitel" value="{{ page.title }} ({{ page.url }})">
+<div class="feedback-row">
+<div class="feedback-field">
+<label for="fb-name">Dein Name (optional):</label>
+<input type="text" id="fb-name" name="Name" placeholder="z. B. Max">
+</div>
+<div class="feedback-field">
+<label for="fb-rating">Wie verständlich war es?</label>
+<select id="fb-rating" name="Bewertung">
+<option value="Super / Sehr gut">⭐⭐⭐⭐⭐ Super verständlich</option>
+<option value="Gut" selected>⭐⭐⭐⭐ Gut machbar</option>
+<option value="Mittel">⭐⭐⭐ Ging so / einiges unklar</option>
+<option value="Schwer">⭐⭐ Eher schwer / verwirrend</option>
+<option value="Zu schwer">⭐ Viel zu schwer</option>
+</select>
+</div>
+</div>
+<div class="feedback-field">
+<label for="fb-message">Dein Feedback / gefundener Fehler:*</label>
+<textarea id="fb-message" name="Nachricht" rows="4" required placeholder="Was hat dir geholfen oder wo bist du steckengeblieben?"></textarea>
+</div>
+<button type="submit" class="feedback-submit-btn">Feedback absenden</button>
+</form>
+</div>
+
+<style>
+  .feedback-card {
+    margin-top: 2.5rem;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid rgba(128, 128, 128, 0.25);
+    border-radius: 8px;
+    background: rgba(128, 128, 128, 0.05);
+  }
+
+  .feedback-card h3 {
+    margin-top: 0 !important;
+    margin-bottom: 0.25rem !important;
+  }
+
+  .feedback-subtitle {
+    font-size: 0.9rem;
+    opacity: 0.85;
+    margin-bottom: 1rem !important;
+  }
+
+  .feedback-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .feedback-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .feedback-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    flex: 1;
+    min-width: 220px;
+  }
+
+  .feedback-field label {
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .feedback-field input,
+  .feedback-field select,
+  .feedback-field textarea {
+    padding: 0.5rem 0.65rem;
+    border: 1px solid rgba(128, 128, 128, 0.35);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    color: inherit;
+    font-family: inherit;
+    font-size: 0.9rem;
+    outline: none;
+  }
+
+  .feedback-field input:focus,
+  .feedback-field select:focus,
+  .feedback-field textarea:focus {
+    border-color: #58a6ff;
+  }
+
+  .feedback-field select option {
+    background: #22272e;
+    color: #e6edf3;
+  }
+  html[data-theme="light"] .feedback-field select option {
+    background: #ffffff;
+    color: #24292f;
+  }
+
+  .feedback-submit-btn {
+    align-self: flex-start;
+    padding: 0.5rem 1.1rem;
+    border: none;
+    border-radius: 6px;
+    background: #2da44e;
+    color: #ffffff !important;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  .feedback-submit-btn:hover {
+    background: #2c974b;
+  }
+</style>

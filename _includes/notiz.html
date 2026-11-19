@@ -1,0 +1,23 @@
+{%- comment -%}
+  Aufklappbarer Hinweis-Kasten.
+  Parameter: typ = note | important | warning
+             titel = eigener Titel (optional)
+             offen = true, wenn der Kasten anfangs offen sein soll (optional)
+             inhalt = Markdown-Text (mit capture erstellt)
+{%- endcomment -%}
+{%- assign typ = include.typ | default: "note" | downcase -%}
+{%- case typ -%}
+{%- when "important" -%}
+{%- assign standard = "Wichtig" -%}
+{%- when "warning" -%}
+{%- assign standard = "Achtung" -%}
+{%- else -%}
+{%- assign typ = "note" -%}
+{%- assign standard = "Hinweis" -%}
+{%- endcase -%}
+<details class="notiz notiz-{{ typ }}" markdown="0"{% if include.offen %} open{% endif %}>
+<summary>{{ include.titel | default: standard }}</summary>
+<div class="notiz-inhalt">
+{{ include.inhalt | markdownify }}
+</div>
+</details>
