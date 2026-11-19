@@ -1,0 +1,70 @@
+title: "C#-Tutorial"
+description: "Programmieren lernen mit C# - Schritt fuer Schritt"
+lang: "de-DE"
+url: "darianb23.github.io"
+baseurl: "/BOGY-Aufgaben"
+
+remote_theme: "just-the-docs/just-the-docs"
+color_scheme: "dark"
+
+plugins:
+  - jekyll-remote-theme
+  - jekyll-include-cache
+  - jekyll-seo-tag
+  - jekyll-relative-links
+
+relative_links:
+  enabled: true
+  collections: false
+
+markdown: "kramdown"
+kramdown:
+  input: "GFM"
+  syntax_highlighter: "rouge"
+  parse_block_html: true
+
+search_enabled: true
+search:
+  heading_level: 2
+  previews: 3
+  preview_words_before: 5
+  preview_words_after: 10
+  button: false
+
+nav_sort: "case_insensitive"
+heading_anchors: true
+
+aux_links:
+  "Auf GitHub ansehen":
+    - "https://github.com/DarianB23/BOGY-Aufgaben"
+aux_links_new_tab: true
+
+back_to_top: true
+back_to_top_text: "Nach oben"
+enable_copy_code_button: true
+
+
+callouts:
+  tipp:
+    title: "Tipp"
+    color: "green"
+  hinweis:
+    title: "Hinweis"
+    color: "blue"
+  wichtig:
+    title: "Wichtig"
+    color: "yellow"
+  achtung:
+    title: "Achtung"
+    color: "red"
+
+exclude:
+  - "Loesungen/"
+  - "Gemfile"
+  - "Gemfile.lock"
+  - "node_modules/"
+  - "vendor/bundle/"
+  - "vendor/cache/"
+  - "vendor/gems/"
+  - "vendor/ruby/"
+  - ".github/"

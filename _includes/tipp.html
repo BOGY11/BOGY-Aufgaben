@@ -1,0 +1,15 @@
+{%- comment -%}
+  Ausklappbarer Tipp.
+  Aufruf:
+    {% capture tipp %}
+    Text mit **Markdown** und Code-Blöcken
+    {% endcapture %}
+    {% include tipp.html inhalt=tipp %}
+  Optional: titel="🔍 Lösungshinweis"
+{%- endcomment -%}
+<details class="tipp-box" markdown="0">
+<summary>{{ include.titel | default: "Tipp" }}</summary>
+<div class="tipp-inhalt">
+{{ include.inhalt | markdownify }}
+</div>
+</details>
