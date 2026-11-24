@@ -43,6 +43,8 @@ back_to_top: true
 back_to_top_text: "Nach oben"
 enable_copy_code_button: true
 
+mermaid:
+  version: "10.9.1"
 
 callouts:
   tipp:

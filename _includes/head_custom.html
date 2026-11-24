@@ -7,6 +7,9 @@
   Alle Einstellungen werden im Browser gespeichert (localStorage).
   Farben fuer Tipps/Notizen stehen in _sass/custom/custom.scss.
 -->
+{% if site.mermaid %}
+  {% include components/mermaid.html %}
+{% endif %}
 <style>
   :root {
     --sidebar-width: 200px;
