@@ -68,3 +68,9 @@ exclude:
   - "vendor/gems/"
   - "vendor/ruby/"
   - ".github/"
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
