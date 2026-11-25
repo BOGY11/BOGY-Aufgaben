@@ -1,0 +1,129 @@
+{%- assign kapitel = site.pages | where: "parent", "Kapitel" | sort: "nav_order" -%}
+<style>
+.kanban{display:flex;gap:1rem;overflow-x:auto}
+.spalte{flex:1;min-width:220px;background:rgba(128,128,128,.15);padding:.5rem;border-radius:6px}
+.karte{border:1px solid rgba(128,128,128,.4);border-radius:4px;padding:.5rem;margin:.4rem 0;cursor:grab}
+.karte small{display:block;opacity:.7}
+</style>
+
+<div class="kanban" id="board"></div>
+
+<script>
+const KAPITEL = [
+{%- for k in kapitel %}
+  {title: {{ k.title | jsonify }}, url: {{ k.url | relative_url | jsonify }}},
+{%- endfor %}
+];
+
+const SPALTEN = {todo: "To do", doing: "In Arbeit", done: "Fertig"};
+const DB = window.KANBAN_DB || "";
+const USER = window.KANBAN_USER || "";
+const KEY = "{{ include.key | default: 'kanban-v1' }}" + USER;
+
+let daten = [];
+
+async function laden() {
+  try { daten = JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { daten = []; }
+  if (DB && USER) {
+    try {
+      const antwort = await fetch(DB + "/boards/" + USER + ".json");
+      const online = await antwort.json();
+      if (online) { daten = Object.values(online); }
+    } catch (e) { console.error("Board nicht geladen:", e); }
+  }
+  for (const k of daten) { k.kommentare = k.kommentare || []; }
+}
+
+function speichern() {
+  try { localStorage.setItem(KEY, JSON.stringify(daten)); } catch (e) {}
+  if (DB && USER) {
+    fetch(DB + "/boards/" + USER + ".json", {method: "PUT", body: JSON.stringify(daten)})
+      .catch(e => console.error("Board nicht gespeichert:", e));
+  }
+}
+
+function render() {
+  const board = document.getElementById("board");
+  board.innerHTML = "";
+  for (const [key, titel] of Object.entries(SPALTEN)) {
+    const sp = document.createElement("div");
+    sp.className = "spalte";
+    const h = document.createElement("h3");
+    h.textContent = titel;
+    sp.append(h);
+    sp.ondragover = e => e.preventDefault();
+    sp.ondrop = e => {
+      const k = daten.find(d => d.id == e.dataTransfer.getData("text"));
+      if (k) { k.spalte = key; speichern(); render(); }
+    };
+    for (const k of daten.filter(d => d.spalte === key)) {
+      const el = document.createElement("div");
+      el.className = "karte";
+      el.draggable = true;
+      el.ondragstart = e => e.dataTransfer.setData("text", k.id);
+
+      const t = document.createElement(k.url ? "a" : "strong");
+      if (k.url) t.href = k.url;
+      t.textContent = k.text;
+      el.append(t);
+
+      if (k.kapitel) {
+        const kap = document.createElement("small");
+        kap.textContent = k.kapitel;
+        el.append(kap);
+      }
+      for (const c of k.kommentare) {
+        const s = document.createElement("small");
+        s.textContent = "💬 " + c;
+        el.append(s);
+      }
+      const b = document.createElement("button");
+      b.textContent = "Kommentar";
+      b.onclick = () => {
+        const c = prompt("Kommentar:");
+        if (c) { k.kommentare.push(c); speichern(); render(); }
+      };
+      el.append(b);
+      sp.append(el);
+    }
+    board.append(sp);
+  }
+}
+
+async function ladeAufgaben() {
+  const gefunden = [];
+  for (const kap of KAPITEL) {
+    try {
+      const antwort = await fetch(kap.url);
+      const doc = new DOMParser().parseFromString(await antwort.text(), "text/html");
+      for (const h of doc.querySelectorAll("h3")) {
+        const text = h.textContent.trim();
+        if (/^(Bonus-)?Aufgabe\s/.test(text)) {
+          gefunden.push({
+            id: kap.url + "#" + h.id,
+            text: text,
+            kapitel: kap.title,
+            url: kap.url + "#" + h.id,
+            spalte: "todo",
+            kommentare: []
+          });
+        }
+      }
+    } catch (e) { console.error("Kapitel nicht geladen:", kap.url, e); }
+  }
+  for (const g of gefunden) {
+    const vorhanden = daten.find(d => d.id == g.id);
+    if (!vorhanden) daten.push(g);
+    else { vorhanden.text = g.text; vorhanden.url = g.url; vorhanden.kapitel = g.kapitel; }
+  }
+  speichern();
+  render();
+}
+
+async function starte() {
+  await laden();
+  render();
+  await ladeAufgaben();
+}
+starte();
+</script>

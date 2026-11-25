@@ -1,0 +1,42 @@
+---
+title: Board
+nav_order: 9
+permalink: /Board
+---
+
+<h1>Mein Board</h1>
+<p>Ziehe die Karten zwischen den Spalten. Dein Board wird online gespeichert und ist über deinen Namen von jedem Gerät aus erreichbar.</p>
+<p>Board von: <strong id="nutzer"></strong> <button id="wechseln">Nutzer wechseln</button></p>
+
+<script>
+window.KANBAN_DB = "https://bogy-board-database-default-rtdb.europe-west1.firebasedatabase.app/";
+
+function bereinigen(text) {
+  return (text || "").toLowerCase().replace(/[^a-z0-9_-]/g, "");
+}
+
+var nutzer = bereinigen(location.hash.slice(1));
+if (!nutzer) {
+  try { nutzer = bereinigen(localStorage.getItem("kanban-nutzer")); } catch (e) {}
+}
+if (!nutzer) {
+  nutzer = bereinigen(prompt("Dein Name oder Code für dein Board (nur Buchstaben, Zahlen, - und _):"));
+}
+if (nutzer) {
+  try { localStorage.setItem("kanban-nutzer", nutzer); } catch (e) {}
+  history.replaceState(null, "", "#" + nutzer);
+}
+window.KANBAN_USER = nutzer;
+
+document.getElementById("nutzer").textContent = nutzer || "(nur lokal)";
+document.getElementById("wechseln").onclick = function () {
+  var neu = bereinigen(prompt("Name oder Code:"));
+  if (neu) {
+    try { localStorage.setItem("kanban-nutzer", neu); } catch (e) {}
+    location.hash = neu;
+    location.reload();
+  }
+};
+</script>
+
+{% include kanban.html key="kanban-v2" %}
