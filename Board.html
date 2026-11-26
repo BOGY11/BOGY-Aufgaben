@@ -14,7 +14,7 @@ ToDo:
 <h1>Mein Board</h1>
 <p>Ziehe die Karten zwischen den Spalten. Dein Board wird online gespeichert und ist über deinen Namen von jedem Gerät aus erreichbar.</p>
 <p>Board von: <strong id="nutzer"></strong> <button id="wechseln">Nutzer wechseln</button></p>
-<div id="board-list"></div>
+<div id="last-user" hidden></div>
 
 <script>
 window.KANBAN_DB = "https://bogy-board-database-default-rtdb.europe-west1.firebasedatabase.app/";
@@ -33,17 +33,18 @@ if (!nutzer) {
   try { 
     const gespeicherterNutzer = bereinigen(localStorage.getItem("kanban-nutzer")); 
     console.info("Nutzer gefunden: " + gespeicherterNutzer);
-    boardList = document.getElementById("board-list");
-    boardList.textContent = "Möchtest du dich wieder mit em letzten nutzer anmelden? ";
-    const lastUsrButton = document.createElement("button");
-    lastUsrButton.textContent = gespeicherterNutzer;
-    lastUsrButton.onclick = () => login(gespeicherterNutzer);
-    boardList.append(lastUsrButton);
+    boardList = document.getElementById("last-user");
+    if (gespeicherterNutzer || gespeicherterNutzer != "") {
+      boardList.hidden = false;
+      boardList.textContent = "Möchtest du dich wieder mit em letzten nutzer anmelden? ";
+      const lastUsrButton = document.createElement("button");
+      lastUsrButton.textContent = gespeicherterNutzer;
+      lastUsrButton.onclick = () => login(gespeicherterNutzer);
+      boardList.append(lastUsrButton);
+    }
   } catch (e) {}
 }
-/*if (!nutzer) {
-  nutzer = bereinigen(prompt("Dein Name oder Code für dein Board (nur Buchstaben, Zahlen, - und _):"));
-}*/
+
 window.KANBAN_USER = nutzer;
 </script>
 
