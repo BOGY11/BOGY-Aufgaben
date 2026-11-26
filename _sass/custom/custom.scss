@@ -12,7 +12,9 @@
    _includes/head_custom.html - hier KEINE .side-bar- oder .main-Regeln.
    ============================================================= */
 
-
+.text-block {
+  white-space: pre-line;
+}
 /* ---------- 1. Menue in der Seitenleiste ---------- */
 .nav-list .nav-list-item .nav-list-link {
   font-size: 0.85rem !important;
@@ -176,3 +178,4 @@ pre {
     border-left-width: 1px;
   }
 }
+
