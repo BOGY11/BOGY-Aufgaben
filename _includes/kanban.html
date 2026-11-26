@@ -107,12 +107,6 @@ ToDo: Nicht im local storage spichern. Ist schon auf DB
 */
 
 async function ladeKapitel() {
-/*
-ToDo: Aufgaben nicht als eigene task sondern unter Kapiteln schreiben.
-ToDo: Nicht im local storage spichern. Ist schon auf DB
-*/
-
-async function ladeKapitel() {
   const gefunden = [];
   for (const kap of KAPITEL) {
     try {
@@ -122,8 +116,6 @@ async function ladeKapitel() {
         const text = h.textContent.trim();
         if (/^(Bonus-)?Aufgabe\s/.test(text) || /^Stufe\s/.test(text)) {
           gefunden.push({
-            id: kap.url,
-            text: text
             id: kap.url,
             text: text
           });
