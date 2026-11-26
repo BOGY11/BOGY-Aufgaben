@@ -1,7 +1,7 @@
 title: "C#-Tutorial"
 description: "Programmieren lernen mit C# - Schritt fuer Schritt"
 lang: "de-DE"
-url: "darianb23.github.io"
+url: "bogy11.github.io"
 baseurl: "/BOGY-Aufgaben"
 
 remote_theme: "just-the-docs/just-the-docs"
@@ -36,7 +36,7 @@ heading_anchors: true
 
 aux_links:
   "Auf GitHub ansehen":
-    - "https://github.com/DarianB23/BOGY-Aufgaben"
+    - "https://github.com/bogy11/BOGY-Aufgaben"
 aux_links_new_tab: true
 
 back_to_top: true

@@ -4,6 +4,7 @@
 .spalte{flex:1;min-width:220px;background:rgba(128,128,128,.15);padding:.5rem;border-radius:6px}
 .karte{border:1px solid rgba(128,128,128,.4);border-radius:4px;padding:.5rem;margin:.4rem 0;cursor:grab}
 .karte small{display:block;opacity:.7}
+.kapitel-text{white-space: pre-line;}
 </style>
 
 <div class="kanban" id="board"></div>
@@ -36,6 +37,10 @@ async function laden() {
     console.info("Keine gespieicherten daten gefunden. Werden geladen...");
     ladeKapitel();
   }
+  if (daten.length == 0) {
+    console.info("Keine gespieicherten daten gefunden. Werden geladen...");
+    ladeKapitel();
+  }
 }
 
 function speichern() {
@@ -47,6 +52,7 @@ function speichern() {
 }
 
 function render() {
+  console.info("render start");
   console.info("render start");
   const board = document.getElementById("board");
   board.innerHTML = "";
@@ -73,6 +79,7 @@ function render() {
 
       if (k.kapitel) {
         const kap = document.createElement("small");
+        kap.className = "kapitel-text"; 
         kap.textContent = k.kapitel;
         el.append(kap);
       }
@@ -117,20 +124,31 @@ async function ladeKapitel() {
     } catch (e) { console.error("Kapitel nicht geladen:", kap.url, e); }
   }
   for (const kap of KAPITEL) {
-    const vorhanden = daten.find(d => d.id == kap.id);
-    if (!vorhanden) {
-      console.info("Kapitel " + kap.title + " Wird erstellt");
-      const aufgabenInKapitel = gefunden.filter(g => g.id == kap.url).map(g => g.text);
-      daten.push({
-        id: kap.url,
-        text: kap.title,
-        kapitel: aufgabenInKapitel.join("\n"),
-        url: kap.url,
-        spalte: "todo", 
-        kommentare: []
-      });
-    }
-    else { vorhanden.text = g.text; vorhanden.url = g.url; vorhanden.kapitel = g.kapitel; }
+  const vorhanden = daten.find(d => d.id === kap.url);
+
+  const aufgabenInKapitel = gefunden
+    .filter(g => g.id === kap.url)
+    .map(g => g.text);
+
+  const kapitelText = aufgabenInKapitel.join("\n");
+
+  if (!vorhanden) {
+    console.info("Kapitel " + kap.title + " wird erstellt");
+
+    daten.push({
+      id: kap.url,
+      text: kap.title,
+      kapitel: kapitelText,
+      url: kap.url,
+      spalte: "todo",
+      kommentare: []
+    });
+  } else {
+    vorhanden.text = kap.title;
+    vorhanden.url = kap.url;
+    vorhanden.kapitel = kapitelText;
+  }
+
   }
   speichern();
   render();
