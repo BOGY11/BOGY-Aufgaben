@@ -32,6 +32,10 @@ async function laden() {
     } catch (e) { console.error("Board nicht geladen:", e); }
   }
   for (const k of daten) { k.kommentare = k.kommentare || []; }
+  if (daten.length == 0) {
+    console.info("Keine gespieicherten daten gefunden. Werden geladen...");
+    ladeKapitel();
+  }
 }
 
 function speichern() {
@@ -43,6 +47,7 @@ function speichern() {
 }
 
 function render() {
+  console.info("render start");
   const board = document.getElementById("board");
   board.innerHTML = "";
   for (const [key, titel] of Object.entries(SPALTEN)) {
@@ -61,7 +66,6 @@ function render() {
       el.className = "karte";
       el.draggable = true;
       el.ondragstart = e => e.dataTransfer.setData("text", k.id);
-
       const t = document.createElement(k.url ? "a" : "strong");
       if (k.url) t.href = k.url;
       t.textContent = k.text;
@@ -90,7 +94,10 @@ function render() {
   }
 }
 
-async function ladeAufgaben() {
+/*ToDo: Aufgaben nicht als eigene task sondern unter Kapiteln schreiben.
+*/
+
+async function ladeKapitel() {
   const gefunden = [];
   for (const kap of KAPITEL) {
     try {
@@ -100,20 +107,27 @@ async function ladeAufgaben() {
         const text = h.textContent.trim();
         if (/^(Bonus-)?Aufgabe\s/.test(text)) {
           gefunden.push({
-            id: kap.url + "#" + h.id,
-            text: text,
-            kapitel: kap.title,
-            url: kap.url + "#" + h.id,
-            spalte: "todo",
-            kommentare: []
+            id: kap.url,
+            text: text
           });
         }
       }
     } catch (e) { console.error("Kapitel nicht geladen:", kap.url, e); }
   }
-  for (const g of gefunden) {
-    const vorhanden = daten.find(d => d.id == g.id);
-    if (!vorhanden) daten.push(g);
+  for (const kap of KAPITEL) {
+    const vorhanden = daten.find(d => d.id == kap.id);
+    if (!vorhanden) {
+      console.info("Kapitel " + kap.title + " Wird erstellt");
+      const aufgabenInKapitel = gefunden.filter(g => g.id == kap.url).map(g => g.text);
+      daten.push({
+        id: kap.url,
+        text: kap.title,
+        kapitel: aufgabenInKapitel.join("\n"),
+        url: kap.url,
+        spalte: "todo", 
+        kommentare: []
+      });
+    }
     else { vorhanden.text = g.text; vorhanden.url = g.url; vorhanden.kapitel = g.kapitel; }
   }
   speichern();
@@ -123,7 +137,6 @@ async function ladeAufgaben() {
 async function starte() {
   await laden();
   render();
-  await ladeAufgaben();
 }
 starte();
 </script>
