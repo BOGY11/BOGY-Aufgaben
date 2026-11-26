@@ -18,12 +18,12 @@ const KAPITEL = [
 const SPALTEN = {todo: "To do", doing: "In Arbeit", done: "Fertig"};
 const DB = window.KANBAN_DB || "";
 const USER = window.KANBAN_USER || "";
+console.info("Angemelde ist: " + USER);
 const KEY = "{{ include.key | default: 'kanban-v1' }}" + USER;
 
 let daten = [];
 
 async function laden() {
-  try { daten = JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { daten = []; }
   if (DB && USER) {
     try {
       const antwort = await fetch(DB + "/boards/" + USER + ".json");
@@ -39,7 +39,7 @@ async function laden() {
 }
 
 function speichern() {
-  try { localStorage.setItem(KEY, JSON.stringify(daten)); } catch (e) {}
+  console.info("Speichern... Nutzer: " + USER);
   if (DB && USER) {
     fetch(DB + "/boards/" + USER + ".json", {method: "PUT", body: JSON.stringify(daten)})
       .catch(e => console.error("Board nicht gespeichert:", e));
@@ -107,7 +107,7 @@ async function ladeKapitel() {
       const doc = new DOMParser().parseFromString(await antwort.text(), "text/html");
       for (const h of doc.querySelectorAll("h3")) {
         const text = h.textContent.trim();
-        if (/^(Bonus-)?Aufgabe\s/.test(text)) {
+        if (/^(Bonus-)?Aufgabe\s/.test(text) || /^Stufe\s/.test(text)) {
           gefunden.push({
             id: kap.url,
             text: text

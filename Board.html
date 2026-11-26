@@ -14,26 +14,51 @@ ToDo:
 <h1>Mein Board</h1>
 <p>Ziehe die Karten zwischen den Spalten. Dein Board wird online gespeichert und ist über deinen Namen von jedem Gerät aus erreichbar.</p>
 <p>Board von: <strong id="nutzer"></strong> <button id="wechseln">Nutzer wechseln</button></p>
+<div id="board-list"></div>
 
 <script>
 window.KANBAN_DB = "https://bogy-board-database-default-rtdb.europe-west1.firebasedatabase.app/";
+var nutzer = bereinigen(location.hash.slice(1));
 
 function bereinigen(text) {
   return (text || "").toLowerCase().replace(/[^a-z0-9_-]/g, "");
 }
 
-var nutzer = bereinigen(location.hash.slice(1));
-if (!nutzer) {
-  try { nutzer = bereinigen(localStorage.getItem("kanban-nutzer")); } catch (e) {}
+function login(user) {
+  location.hash = user;
+  location.reload();
 }
+
 if (!nutzer) {
+  try { 
+    const gespeicherterNutzer = bereinigen(localStorage.getItem("kanban-nutzer")); 
+    console.info("Nutzer gefunden: " + gespeicherterNutzer);
+    boardList = document.getElementById("board-list");
+    boardList.textContent = "Möchtest du dich wieder mit em letzten nutzer anmelden? ";
+    const lastUsrButton = document.createElement("button");
+    lastUsrButton.textContent = gespeicherterNutzer;
+    lastUsrButton.onclick = () => login(gespeicherterNutzer);
+    boardList.append(lastUsrButton);
+  } catch (e) {}
+}
+/*if (!nutzer) {
   nutzer = bereinigen(prompt("Dein Name oder Code für dein Board (nur Buchstaben, Zahlen, - und _):"));
-}
+}*/
+window.KANBAN_USER = nutzer;
+</script>
+
+<div id="kanban-container" hidden>
+  {% include kanban.html key="kanban-v2" %}
+</div>
+
+<script>
+const kanbanContainer = document.getElementById("kanban-container");
+
 if (nutzer) {
   try { localStorage.setItem("kanban-nutzer", nutzer); } catch (e) {}
   history.replaceState(null, "", "#" + nutzer);
+  kanbanContainer.hidden = false;
 }
-window.KANBAN_USER = nutzer;
 
 document.getElementById("nutzer").textContent = nutzer || "(nur lokal)";
 document.getElementById("wechseln").onclick = function () {
@@ -45,5 +70,3 @@ document.getElementById("wechseln").onclick = function () {
   }
 };
 </script>
-
-{% include kanban.html key="kanban-v2" %}
