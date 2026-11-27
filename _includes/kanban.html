@@ -18,13 +18,14 @@ const KAPITEL = [
 
 const SPALTEN = {todo: "To do", doing: "In Arbeit", done: "Fertig"};
 const DB = window.KANBAN_DB || "";
-const USER = window.KANBAN_USER || "";
+let USER = window.KANBAN_USER || "";
 console.info("Angemelde ist: " + USER);
-const KEY = "{{ include.key | default: 'kanban-v1' }}" + USER;
+let KEY = "{{ include.key | default: 'kanban-v1' }}" + USER;
 
 let daten = [];
 
 async function laden() {
+  daten = [];
   if (DB && USER) {
     try {
       const antwort = await fetch(DB + "/boards/" + USER + ".json");
@@ -33,7 +34,7 @@ async function laden() {
     } catch (e) { console.error("Board nicht geladen:", e); }
   }
   for (const k of daten) { k.kommentare = k.kommentare || []; }
-  if (daten.length == 0) {
+  if (daten.length == 0 && USER && USER != "admin") {
     console.info("Keine gespieicherten daten gefunden. Werden geladen...");
     ladeKapitel();
   }
@@ -45,7 +46,7 @@ async function laden() {
 
 function speichern() {
   console.info("Speichern... Nutzer: " + USER);
-  if (DB && USER) {
+  if (DB && USER && USER != "admin") {
     fetch(DB + "/boards/" + USER + ".json", {method: "PUT", body: JSON.stringify(daten)})
       .catch(e => console.error("Board nicht gespeichert:", e));
   }
@@ -91,8 +92,11 @@ function render() {
       const b = document.createElement("button");
       b.textContent = "Kommentar";
       b.onclick = () => {
-        const c = prompt("Kommentar:");
-        if (c) { k.kommentare.push(c); speichern(); render(); }
+        const commentText = prompt("Kommentar:");
+        if (commentText) {
+          const c = window.KANBAN_USER + ": " + commentText;
+          if (c) { k.kommentare.push(c); speichern(); render(); }
+        }
       };
       el.append(b);
       sp.append(el);
@@ -155,8 +159,19 @@ async function ladeKapitel() {
 }
 
 async function starte() {
+  USER = window.KANBAN_USER || "";
+  KEY = "{{ include.key | default: 'kanban-v1' }}" + USER;
   await laden();
   render();
 }
+
+async function starteAdmin() {
+  USER = window.KANBAN_USER_ADMIN || "";
+  KEY = "{{ include.key | default: 'kanban-v1' }}" + USER;
+  await laden();
+  render();
+}
+
+window.loadBoard = starteAdmin;
 starte();
 </script>

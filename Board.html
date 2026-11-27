@@ -6,15 +6,15 @@ permalink: /Board
 
 /*
 ToDo: 
-- Automatic BOGY-User.
 - Admin account
 - Admin board
 */
 
 <h1>Mein Board</h1>
 <p>Ziehe die Karten zwischen den Spalten. Dein Board wird online gespeichert und ist über deinen Namen von jedem Gerät aus erreichbar.</p>
-<p>Board von: <strong id="nutzer"></strong> <button id="wechseln">Nutzer wechseln</button></p>
+<p id="nutzer-text">Board von: <strong id="nutzer"></strong> <button id="wechseln">Nutzer wechseln</button></p>
 <div id="last-user" hidden></div>
+<div id="user-list" hidden>Liste an Benutzern:<br></div>
 
 <script>
 window.KANBAN_DB = "https://bogy-board-database-default-rtdb.europe-west1.firebasedatabase.app/";
@@ -27,6 +27,11 @@ function bereinigen(text) {
 function login(user) {
   location.hash = user;
   location.reload();
+}
+
+function setUserForAdmin(user){
+  window.KANBAN_USER_ADMIN = user;
+  window.loadBoard();
 }
 
 if (!nutzer) {
@@ -55,13 +60,50 @@ window.KANBAN_USER = nutzer;
 <script>
 const kanbanContainer = document.getElementById("kanban-container");
 
-if (nutzer) {
+async function getUsers() {
+  let users = [];
+  try {
+    const antwort = await fetch(window.KANBAN_DB + "/boards" + ".json");
+    const daten = await antwort.json();
+    users = Object.keys(daten);
+  }
+  catch (e) {
+    console.error("Could not load users from DB");
+  }
+  return users;
+}
+
+async function adminFiew() {
+  const userlist = await getUsers();
+  const userListD = document.getElementById("user-list");
+  userlist.forEach(user => {
+    if (user != "admin") {
+      const selectUserButton = document.createElement("button");
+      selectUserButton.textContent = user;
+      selectUserButton.onclick = () => {
+        setUserForAdmin(user);
+        document.getElementById("nutzer").textContent = "admin (sieht: " + user + ")";
+        kanbanContainer.hidden = false;
+      };
+      userListD.append(selectUserButton);
+    }
+  });
+  userListD.hidden = false;
+}
+
+if (nutzer == "admin") {
+  adminFiew();
+}
+else if (nutzer) {
   try { localStorage.setItem("kanban-nutzer", nutzer); } catch (e) {}
   history.replaceState(null, "", "#" + nutzer);
   kanbanContainer.hidden = false;
+  document.getElementById("nutzer").textContent = nutzer;
+}
+else {
+  document.getElementById("nutzer").textContent = "none"
 }
 
-document.getElementById("nutzer").textContent = nutzer || "(nur lokal)";
 document.getElementById("wechseln").onclick = function () {
   var neu = bereinigen(prompt("Name oder Code:"));
   if (neu) {
