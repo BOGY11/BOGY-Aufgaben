@@ -4,8 +4,8 @@
 
 <script>
 /*
-ToDo: add comments
 ToDo: refactor
+ToDo: add comments
 */
 
 const KAPITEL = [
@@ -17,11 +17,16 @@ const KAPITEL = [
 const SPALTEN = {todo: "To do", doing: "In Arbeit", done: "Fertig"};
 const DB = window.KANBAN_DB || "";
 let USER = window.KANBAN_USER || "";
+let IsAdmin = false;
 console.info("Angemelde ist: " + USER);
 let KEY = "{{ include.key | default: 'kanban-v1' }}" + USER;
 
 let daten = [];
 
+/*
+Kanban-Daten des Nutzers werden aus der DB geladen und in 'daten' gespeichert.
+Falls keine daten vorhanden sind werden sie mit 'ladeKapitel()' geladen.
+*/
 async function laden() {
   daten = [];
   if (DB && USER) {
@@ -36,12 +41,11 @@ async function laden() {
     console.info("Keine gespieicherten daten gefunden. Werden geladen...");
     ladeKapitel();
   }
-  if (daten.length == 0) {
-    console.info("Keine gespieicherten daten gefunden. Werden geladen...");
-    ladeKapitel();
-  }
 }
 
+/*
+'daten' des Nutzers werden auf DB hochgeladen.
+*/
 function speichern() {
   console.info("Speichern... Nutzer: " + USER);
   if (DB && USER && USER != "admin") {
@@ -50,77 +54,98 @@ function speichern() {
   }
 }
 
+/*rendert das board*/
 function render() {
   console.info("render start");
   console.info("render start");
   const board = document.getElementById("board");
   board.innerHTML = "";
   for (const [key, titel] of Object.entries(SPALTEN)) {
-    const sp = document.createElement("div");
-    sp.className = "spalte";
-    const h = document.createElement("h3");
-    h.textContent = titel;
-    sp.append(h);
-    sp.ondragover = e => e.preventDefault();
-    sp.ondrop = e => {
-      const k = daten.find(d => d.id == e.dataTransfer.getData("text"));
-      if (k) { k.spalte = key; speichern(); render(); }
-    };
-    for (const k of daten.filter(d => d.spalte === key)) {
-      const el = document.createElement("div");
-      el.className = "karte";
-      el.draggable = true;
-      el.ondragstart = e => e.dataTransfer.setData("text", k.id);
-
-      const t = document.createElement(k.url ? "a" : "strong");
-      if (k.url) t.href = k.url;
-      t.textContent = k.text;
-      el.append(t);
-
-      const check = document.createElement("input");
-      check.type = "checkbox";
-      check.className = "card-check";
-      check.title = "Als erledigt markieren";
-      check.checked = k.isDone;
-
-
-      el.classList.toggle("done", check.checked);
-
-      check.addEventListener("change", () => {
-        el.classList.toggle("done", check.checked);
-        k.isDone = check.checked;
-        speichern();
-        render();
-      });
-
-      el.prepend(check);
-
-      if (k.kapitel) {
-        const kap = document.createElement("small");
-        kap.className = "kapitel-text"; 
-        kap.textContent = k.kapitel;
-        el.append(kap);
-      }
-      for (const c of k.kommentare) {
-        const s = document.createElement("small");
-        s.textContent = "💬 " + c;
-        el.append(s);
-      }
-      const b = document.createElement("button");
-      b.textContent = "Kommentar";
-      b.onclick = () => {
-        const commentText = prompt("Kommentar:");
-        if (commentText) {
-          const c = window.KANBAN_USER + ": " + commentText;
-          if (c) { k.kommentare.push(c); speichern(); render(); }
-        }
-      };
-      el.append(b);
-      sp.append(el);
-    }
-    board.append(sp);
+    board.append(createSpalte(key, titel));
   }
 }
+
+/*erstellt eine spalte*/
+function createSpalte(spalte, titel) {
+  const sp = document.createElement("div");
+  sp.className = "spalte";
+  const h = document.createElement("h3");
+  h.textContent = titel;
+  sp.append(h);
+  sp.ondragover = e => e.preventDefault();
+  sp.ondrop = e => {
+    const k = daten.find(d => d.id == e.dataTransfer.getData("text"));
+    if (k) { k.spalte = spalte; speichern(); render(); }
+  };
+  for (const k of daten.filter(d => d.spalte === spalte)) {
+    sp.append(createKarte(k));
+  }
+  return sp;
+}
+
+/*erstellt ein karte*/
+function createKarte(k) {
+  const el = document.createElement("div");
+    el.className = "karte";
+    el.draggable = true;
+    el.ondragstart = e => e.dataTransfer.setData("text", k.id);
+
+    const t = document.createElement(k.url ? "a" : "strong");
+    if (k.url) t.href = k.url;
+    t.textContent = k.text;
+    el.append(t);
+
+    el.prepend(createCheck(el, k));
+
+    if (k.kapitel) {
+      const kap = document.createElement("small");
+      kap.className = "kapitel-text"; 
+      kap.textContent = k.kapitel;
+      el.append(kap);
+    }
+    for (const c of k.kommentare) {
+      const s = document.createElement("small");
+      s.textContent = "💬 " + c;
+      el.append(s);
+    }
+    
+    el.append(createKommentarButton(k));
+    return el;
+}
+
+/*erstellt checkbox für karte*/
+function createCheck(el, k) {
+  const check = document.createElement("input");
+  check.type = "checkbox";
+  check.className = "card-check";
+  check.title = "Als erledigt markieren";
+  check.checked = k.isDone;
+
+  el.classList.toggle("done", check.checked);
+  check.addEventListener("change", () => {
+    el.classList.toggle("done", check.checked);
+    k.isDone = check.checked;
+    speichern();
+    render();
+  });
+
+  return check;
+}
+
+/*erstellt Kommentar-button für karte*/
+function createKommentarButton(k) {
+  const b = document.createElement("button");
+    b.textContent = "Kommentar";
+    b.onclick = () => {
+      const commentText = prompt("Kommentar:");
+      if (commentText) {
+        const c = window.KANBAN_USER + ": " + commentText;
+        if (c) { k.kommentare.push(c); speichern(); render(); }
+      }
+    };
+    return b;
+}
+
 
 async function ladeKapitel() {
   const gefunden = [];
@@ -137,54 +162,57 @@ async function ladeKapitel() {
           });
         }
       }
-    } catch (e) { console.error("Kapitel nicht geladen:", kap.url, e); }
-  }
-  for (const kap of KAPITEL) {
-  const vorhanden = daten.find(d => d.id === kap.url);
+    } 
+    catch (e) {
+      console.error("Kapitel nicht geladen:", kap.url, e); 
+    }
 
-  const aufgabenInKapitel = gefunden
-    .filter(g => g.id === kap.url)
-    .map(g => g.text);
+    const vorhanden = daten.find(d => d.id === kap.url);
 
-  const kapitelText = aufgabenInKapitel.join("\n");
+    const aufgabenInKapitel = gefunden
+      .filter(g => g.id === kap.url)
+      .map(g => g.text);
 
-  if (!vorhanden) {
-    console.info("Kapitel " + kap.title + " wird erstellt");
+    const kapitelText = aufgabenInKapitel.join("\n");
 
-    daten.push({
-      id: kap.url,
-      text: kap.title,
-      kapitel: kapitelText,
-      url: kap.url,
-      spalte: "todo",
-      isDone: false,
-      kommentare: []
-    });
-  } else {
-    vorhanden.text = kap.title;
-    vorhanden.url = kap.url;
-    vorhanden.kapitel = kapitelText;
-  }
-
+    if (!vorhanden) {
+      daten.push({
+        id: kap.url,
+        text: kap.title,
+        kapitel: kapitelText,
+        url: kap.url,
+        spalte: "todo",
+        isDone: false,
+        kommentare: []
+      });
+    } else {
+      vorhanden.text = kap.title;
+      vorhanden.url = kap.url;
+      vorhanden.kapitel = kapitelText;
+    }
   }
   speichern();
   render();
 }
 
+/*standart Start-Funktion*/
 async function starte() {
   USER = window.KANBAN_USER || "";
   KEY = "{{ include.key | default: 'kanban-v1' }}" + USER;
+  IsAdmin = false;
   await laden();
   render();
 }
 
+/*Admin Start*/
 async function starteAdmin() {
   USER = window.KANBAN_USER_ADMIN || "";
   KEY = "{{ include.key | default: 'kanban-v1' }}" + USER;
+  IsAdmin = true;
   await laden();
   render();
 }
 
-window.loadBoard = starteAdmin;
+window.loadAdmin = starteAdmin;
 starte();
 </script>
