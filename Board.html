@@ -70,6 +70,8 @@ async function adminFiew() {
   document.getElementById("nutzer").textContent = "admin";
   const userlist = await getUsers();
   const userListD = document.getElementById("user-list");
+  const userButtonsList = document.createElement("div");
+  userButtonsList.className = "user-buttons-list";
   userlist.forEach(user => {
     if (user != "admin") {
       const selectUserButton = document.createElement("button");
@@ -79,9 +81,10 @@ async function adminFiew() {
         document.getElementById("nutzer").textContent = "admin (sieht: " + user + ")";
         kanbanContainer.hidden = false;
       };
-      userListD.append(selectUserButton);
+      userButtonsList.append(selectUserButton);
     }
   });
+  userListD.append(userButtonsList);
   userListD.hidden = false;
 }
 
@@ -98,7 +101,7 @@ else {
   document.getElementById("nutzer").textContent = "none"
 }
 
-document.getElementById("wechseln").onclick = function () {
+document.getElementById("wechseln").onclick = () => {
   var neu = bereinigen(prompt("Name oder Code:"));
   if (neu) {
     try { localStorage.setItem("kanban-nutzer", neu); } catch (e) {}

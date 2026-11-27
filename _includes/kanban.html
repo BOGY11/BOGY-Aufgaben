@@ -87,14 +87,14 @@ function createSpalte(spalte, titel) {
 function createKarte(k) {
   const el = document.createElement("div");
     el.className = "karte";
-    el.draggable = true;
-    el.ondragstart = e => e.dataTransfer.setData("text", k.id);
+    if (!k.isDone) el.draggable = true;
+    if (!k.isDone) el.ondragstart = e => e.dataTransfer.setData("text", k.id);
 
     const t = document.createElement(k.url ? "a" : "strong");
     if (k.url) t.href = k.url;
     t.textContent = k.text;
+    if (k.spalte == "doing") el.prepend(createAufgabenCheckboxList(k));
     el.append(t);
-
     el.prepend(createCheck(el, k));
 
     if (k.kapitel) {
@@ -117,19 +117,44 @@ function createKarte(k) {
 function createCheck(el, k) {
   const check = document.createElement("input");
   check.type = "checkbox";
-  check.className = "card-check";
-  check.title = "Als erledigt markieren";
+  if (k.spalte == "done") check.className = "card-check";
+  else check.className = "card-help";
+  check.title = k.spalte == "done" ? "Als erledigt markieren" : "Hilfe anfordern";
   check.checked = k.isDone;
 
-  el.classList.toggle("done", check.checked);
+  if (k.spalte == "done") el.classList.toggle("done", check.checked);
+  else el.classList.toggle("help", check.checked);
+
   check.addEventListener("change", () => {
-    el.classList.toggle("done", check.checked);
     k.isDone = check.checked;
     speichern();
     render();
   });
 
   return check;
+}
+
+/*erstellt checkbox für aufgaben in karte*/
+function createAufgabenCheckboxList (k) {
+  const checkboxList = document.createElement("div");
+  checkboxList.className = "task-check-list";
+  const anzahlAufgaben = k.kapitel.split("\n").length;
+  for (let i = 0; i < anzahlAufgaben; i++) {
+    const check = document.createElement("input");
+    check.type = "checkbox";
+    check.className = "task-check";
+    check.title = "Als erledigt markieren";
+    check.checked = k.aufgabeIsDone[i];
+    check.checkId = i;
+
+    check.addEventListener("change", () => {
+      k.aufgabeIsDone[check.checkId] = check.checked;
+      speichern();
+      render();
+    });
+    checkboxList.append(check);
+  }
+  return checkboxList;
 }
 
 /*erstellt Kommentar-button für karte*/
@@ -179,6 +204,7 @@ async function ladeKapitel() {
       daten.push({
         id: kap.url,
         text: kap.title,
+        aufgabeIsDone: aufgabenInKapitel.map(() => false),
         kapitel: kapitelText,
         url: kap.url,
         spalte: "todo",
